@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MediTech – Doctor Dashboard</title>
+<link rel="stylesheet" href="styl.css">
+
+<style>
+body {
+    background: #f3f6f8;
+    font-family: "Segoe UI", sans-serif;
+}
+
+.dashboard {
+    width: 92%;
+    margin: 30px auto;
+}
+
+.section-box {
+    background: #fff;
+    padding: 22px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+    box-shadow: 0px 4px 14px rgba(0,0,0,0.05);
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.section-box h2 {
+    font-size: 1.5rem;
+    color: #007bff;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.section-content {
+    padding: 15px;
+    margin-top: 15px;
+    border-top: 1px solid #e3e3e3;
+    display: none;
+}
+
+/* Patient card */
+.patient-card {
+    background: #f8faff;
+    padding: 15px;
+    border: 1px solid #d9e7ff;
+    border-radius: 10px;
+    margin-bottom: 12px;
+}
+
+.patient-card h3 {
+    margin: 0;
+    color: #0079ff;
+}
+
+.btn {
+    padding: 8px 15px;
+    border: none;
+    background: #007bff;
+    color: #fff;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.btn-green { background:#28a745; }
+.btn-red { background:#d9534f; }
+
+/* Modal */
+.modal {
+    position: fixed;
+    left: 0; top: 0;
+    height: 100%; width: 100%;
+    background: rgba(0,0,0,0.4);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-box {
+    width: 45%;
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+}
+
+.modal-box h2 {
+    color: #007bff;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="container">
+      <img src="logo.webp" style="height:65px; margin-right:10px;">
+      <span style="font-size:2rem; font-weight:bold; color:#007bff;">MediTech – Doctor</span>
+
+      <button id="logoutBtn" class="btn-red" style="float:right;">Logout</button>
+  </div>
+</header>
+
+<div class="dashboard">
+
+    <!-- NEW APPOINTMENTS -->
+    <div class="section-box" onclick="toggleSection('newSec')">
+        <h2>🆕 New Appointments <span id="notifBubble"
+             style="display:none; background:red; color:white; padding:3px 10px; border-radius:15px;">
+        </span></h2>
+        <div id="newSec" class="section-content">
+            <div id="newPatientsList"></div>
+        </div>
+    </div>
+
+    <!-- MY PATIENTS -->
+    <div class="section-box" onclick="toggleSection('mySec')">
+        <h2>👨‍⚕️ My Patients</h2>
+        <div id="mySec" class="section-content">
+            <div id="myPatientsList"></div>
+        </div>
+    </div>
+
+</div>
+
+<!-- PATIENT DETAILS MODAL -->
+<div class="modal" id="detailsModal">
+    <div class="modal-box">
+        <h2>Patient Details</h2>
+        <div id="detailsBody"></div>
+        <br>
+        <button class="btn-red" onclick="closeModal()">Close</button>
+    </div>
+</div>
+
+<!-- PRESCRIPTION MODAL -->
+<div class="modal" id="prescriptionModal">
+    <div class="modal-box">
+        <h2>Write Prescription</h2>
+
+        <label>Medicine Name:</label>
+        <input id="medName" class="input" style="width:100%; padding:8px">
+
+        <label>Dosage:</label>
+        <input id="dosage" class="input" style="width:100%; padding:8px">
+
+        <label>Instructions:</label>
+        <textarea id="instructions" style="width:100%; padding:8px"></textarea>
+
+        <label>Next Appointment:</label>
+        <input type="date" id="nextAppointment" style="width:100%; padding:8px">
+
+        <br><br>
+        <button id="submitPrescription" class="btn-green">Submit</button>
+        <button class="btn-red" onclick="closeModal()">Close</button>
+    </div>
+</div>
+
+<script type="module">
+/* Firebase initialization */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { 
+    getFirestore, collection, query, where, onSnapshot, addDoc, doc, updateDoc 
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { 
+    getAuth, onAuthStateChanged, signOut 
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const firebaseConfig = { 
+  apiKey: "AIzaSyAouRcoDjAVMNZmUkePlzNxUHD6DXxbxco",
+  authDomain: "meditech-83cbc.firebaseapp.com",
+  projectId: "meditech-83cbc",
+  storageBucket: "meditech-83cbc.appspot.com",
+  messagingSenderId: "687068515209",
+  appId: "1:687068515209:web:c4d007ce8abfc4fcb76f58"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+let doctor = null;
+let selectedPatient = null;
+
+onAuthStateChanged(auth, async (user) => {
+    if (!user) return (window.location.href = "login.html");
+
+    // Fetch doctor profile
+    const snap = await onSnapshot(
+        query(collection(db, "doctors"), where("email", "==", user.email)),
+        (docs) => {
+            docs.forEach((d) => {
+                doctor = d.data();
+                loadNewPatients();
+                loadMyPatients();
+            });
+        }
+    );
+});
+
+/* Toggle Sections */
+window.toggleSection = function(id) {
+    const sec = document.getElementById(id);
+    sec.style.display = sec.style.display === "block" ? "none" : "block";
+};
+
+/* Load NEW Appointments */
+function loadNewPatients() {
+    const q = query(
+        collection(db, "appointments"),
+        where("department", "==", doctor.department),
+        where("status", "==", "pending")
+    );
+
+    onSnapshot(q, (snap) => {
+        const list = document.getElementById("newPatientsList");
+        const bubble = document.getElementById("notifBubble");
+        list.innerHTML = "";
+
+        if (snap.size > 0) {
+            bubble.style.display = "inline-block";
+            bubble.textContent = snap.size;
+        } else bubble.style.display = "none";
+
+        snap.forEach((docu) => {
+            const p = docu.data();
+
+            list.innerHTML += `
+                <div class="patient-card">
+                    <h3>${p.name} (${p.age})</h3>
+                    <p><b>Symptoms:</b> ${p.symptoms}</p>
+
+                    <button class="btn" onclick="viewDetails('${docu.id}', '${p.name}', '${p.age}', '${p.symptoms}')">View Details</button>
+                    <button class="btn-green" onclick="openPrescription('${docu.id}')">Start Consultation</button>
+                </div>
+            `;
+        });
+    });
+}
+
+/* Load MY Patients */
+function loadMyPatients() {
+    const q = query(
+        collection(db, "appointments"),
+        where("doctorId", "==", doctor.email)
+    );
+
+    onSnapshot(q, (snap) => {
+        const list = document.getElementById("myPatientsList");
+        list.innerHTML = "";
+
+        snap.forEach((docu) => {
+            const p = docu.data();
+
+            list.innerHTML += `
+                <div class="patient-card">
+                    <h3>${p.name}</h3>
+                    <p><b>Next Appointment:</b> ${p.nextAppointment || "Not Set"}</p>
+                    <button class="btn-green" onclick="openPrescription('${docu.id}')">Add Prescription</button>
+                </div>
+            `;
+        });
+    });
+}
+
+/* View Details Modal */
+window.viewDetails = function(id, name, age, symptoms) {
+    selectedPatient = id;
+
+    document.getElementById("detailsBody").innerHTML = `
+        <p><b>Name:</b> ${name}</p>
+        <p><b>Age:</b> ${age}</p>
+        <p><b>Symptoms:</b> ${symptoms}</p>
+    `;
+
+    document.getElementById("detailsModal").style.display = "flex";
+};
+
+/* Open Prescription */
+window.openPrescription = function(id) {
+    selectedPatient = id;
+    document.getElementById("prescriptionModal").style.display = "flex";
+};
+
+window.closeModal = function() {
+    document.getElementById("detailsModal").style.display = "none";
+    document.getElementById("prescriptionModal").style.display = "none";
+};
+
+/* Submit Prescription */
+document.getElementById("submitPrescription").onclick = async () => {
+    await addDoc(collection(db, "prescriptions"), {
+        patientId: selectedPatient,
+        doctorId: doctor.email,
+        medName: document.getElementById("medName").value,
+        dosage: document.getElementById("dosage").value,
+        instructions: document.getElementById("instructions").value,
+        nextAppointment: document.getElementById("nextAppointment").value,
+        pharmacyStatus: "pending"
+    });
+
+    alert("Prescription submitted successfully!");
+    window.closeModal();
+};
+
+/* Logout */
+document.getElementById("logoutBtn").onclick = () => signOut(auth);
+
+</script>
+</body>
+</html>

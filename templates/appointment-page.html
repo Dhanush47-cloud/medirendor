@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Page - Hospital Doctor Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <!-- Sidebar - Common to all pages -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>Doctor Dashboard</h3>
+                <!-- Header doctor profile (moved from navbar) -->
+                <div class="doctor-profile header-doctor-profile">
+                    <img src="img3.jpg" alt="Doctor Profile" class="profile-pic">
+                    <span>Dr. Emily Garcia</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="doctor-dashboard.html"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+                    <li><a href="appointments.html"><i class="fas fa-calendar-alt"></i> <span>Appointments</span></a></li>
+                    <li><a href="appointment-page.html" class="active"><i class="fas fa-user-injured"></i> <span>Appointment Page</span></a></li>
+                    <li><a href="settings.html"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+                    <li><a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Navbar - Common to all pages -->
+            <header class="navbar">
+                <div class="nav-left">
+                    <button class="sidebar-toggle" aria-label="Toggle Sidebar">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 class="page-title">Appointment Page</h1>
+                </div>
+                <div class="nav-center">
+                    <div class="search-bar">
+                        <input type="text" placeholder="Search...">
+                        <i class="fas fa-search"></i>
+                    </div>
+                </div>
+                <div class="nav-right">
+                    <div class="datetime">
+                        <span id="current-date"></span> | <span id="current-time"></span>
+                    </div>
+                    <!-- doctor-profile moved to sidebar header for consistent layout -->
+                </div>
+            </header>
+
+            <!-- Appointment Page Content -->
+            <main class="appointment-page-main">
+                <section class="ongoing-appointment-section card">
+                    <h2>Ongoing Appointment</h2>
+                    <div class="patient-details">
+                        <img src="p1.jpg" alt="John Doe" class="patient-large-pic">
+                        <div class="info">
+                            <h3>John Doe</h3>
+                            <p><strong>Diagnosis:</strong> Hypertension</p>
+                            <p><strong>Time:</strong> 10:00 AM - 10:45 AM</p>
+                            <p class="status ongoing">Status: Ongoing</p>
+                            <button class="btn btn-primary" id="mark-completed-btn">Mark as Completed</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="next-patient-section card">
+                    <h2>Next Patient</h2>
+                    <div class="patient-details next-patient-details">
+                        <img src="p3.jpg" alt="Jane Smith" class="patient-large-pic1">
+                        <div class="info1">
+                            <h3>Jane Smith</h3>
+                            <p><strong>Diagnosis:</strong> Eczema</p>
+                            <p><strong>Time:</strong> 11:30AM - 12:15PM</p>
+                            <p><strong>D.O.B:</strong> 15 jan 2002</p>
+                             <p><strong>SEX:</strong> Male</p>
+                              <p><strong>Weight:</strong> 59kg</p> <p><strong>Height:</strong> 172 cm</p>
+                            <p class="status upcoming">Status: Upcoming</p>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Logout Modal - Common to all pages -->
+    <div id="logout-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Confirm Logout</h2>
+            <p>Are you sure you want to logout?</p>
+            <div class="modal-actions">
+                <button id="confirm-logout" class="btn btn-danger">Logout</button>
+                <button id="cancel-logout" class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

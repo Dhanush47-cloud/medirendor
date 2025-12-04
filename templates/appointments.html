@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointments - Hospital Doctor Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <!-- Sidebar - Common to all pages -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>Doctor Dashboard</h3>
+                <!-- Header doctor profile (moved from navbar) -->
+                <div class="doctor-profile header-doctor-profile">
+                    <img src="img3.jpg" alt="Doctor Profile" class="profile-pic">
+                    <span>Dr. Emily Garcia</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="doctor-dashboard.html"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+                    <li><a href="appointments.html" class="active"><i class="fas fa-calendar-alt"></i> <span>Appointments</span></a></li>
+                    <li><a href="appointment-page.html"><i class="fas fa-user-injured"></i> <span>Appointment Page</span></a></li>
+                    <li><a href="settings.html"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+                    <li><a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Navbar - Common to all pages -->
+            <header class="navbar">
+                <div class="nav-left">
+                    <button class="sidebar-toggle" aria-label="Toggle Sidebar">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 class="page-title">Appointments</h1>
+                </div>
+                <div class="nav-center">
+                    <div class="search-bar">
+                        <input type="text" placeholder="Search appointments..." id="search-appointment">
+                        <i class="fas fa-search"></i>
+                    </div>
+                </div>
+                <div class="nav-right">
+                    <div class="datetime">
+                        <span id="current-date"></span> | <span id="current-time"></span>
+                    </div>
+                    <!-- doctor-profile moved to sidebar header for consistent layout -->
+                </div>
+            </header>
+
+            <!-- Appointments Page Content -->
+            <main class="appointments-main">
+                <section class="appointments-list card">
+                    <h2>Upcoming Appointments</h2>
+                    <div class="table-responsive">
+                        <table class="appointment-table">
+                            <thead>
+                                <tr>
+                                    <th>Patient</th>
+                                    <th>Department</th>
+                                    <th>Diagnosis</th>
+                                    <th>Time</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-patient-name="John Doe">
+                                    <td>
+                                        <div class="patient-info">
+                                            <img src="p1.jpg" alt="John Doe" class="patient-pic">
+                                            <span>John Doe</span>
+                                        </div>
+                                    </td>
+                                    <td>Cardiology</td>
+                                    <td>Hypertension</td>
+                                    <td>10:00 AM</td>
+                                    <td class="status ongoing">Ongoing</td>
+                                </tr>
+                                <tr data-patient-name="Jane Smith">
+                                    <td>
+                                        <div class="patient-info">
+                                            <img src="p4.jpg" alt="Jane Smith" class="patient-pic">
+                                            <span>Jane Smith</span>
+                                        </div>
+                                    </td>
+                                    <td>Dermatology</td>
+                                    <td>Eczema</td>
+                                    <td>11:30 AM</td>
+                                    <td class="status upcoming">Upcoming</td>
+                                </tr>
+                                <tr data-patient-name="Michael Brown">
+                                    <td>
+                                        <div class="patient-info">
+                                            <img src="p3.jpg" alt="Michael Brown" class="patient-pic">
+                                            <span>Michael Brown</span>
+                                        </div>
+                                    </td>
+                                    <td>Pediatrics</td>
+                                    <td>Common Cold</td>
+                                    <td>09:00 AM</td>
+                                    <td class="status completed">Completed</td>
+                                </tr>
+                                <tr data-patient-name="Sarah Johnson">
+                                    <td>
+                                        <div class="patient-info">
+                                            <img src="p2.jpg" alt="Sarah Johnson" class="patient-pic">
+                                            <span>Sarah Johnson</span>
+                                        </div>
+                                    </td>
+                                    <td>Neurology</td>
+                                    <td>Migraine</td>
+                                    <td>02:00 PM</td>
+                                    <td class="status upcoming">Upcoming</td>
+                                </tr>
+                                <tr data-patient-name="David Lee">
+                                    <td>
+                                        <div class="patient-info">
+                                            <img src="p5.jpg" alt="David Lee" class="patient-pic">
+                                            <span>David Lee</span>
+                                        </div>
+                                    </td>
+                                    <td>Orthopedics</td>
+                                    <td>Knee Pain</td>
+                                    <td>03:30 PM</td>
+                                    <td class="status upcoming">Upcoming</td>
+                                </tr>
+                                <tr data-patient-name="Emily Davis">
+                                    <td>
+                                        <div class="patient-info">
+                                            <img src="p6.jpg" alt="Emily Davis" class="patient-pic">
+                                            <span>Emily Davis</span>
+                                        </div>
+                                    </td>
+                                    <td>Ophthalmology</td>
+                                    <td>Cataract Check</td>
+                                    <td>08:45 AM</td>
+                                    <td class="status completed">Completed</td>
+                                    </tr>
+                                    <tr data-patient-name="John Doe">
+                                    <td>
+                                        <div class="patient-info">
+                                            <img src="p7.jpg" alt="Jhon Doe" class="patient-pic">
+                                            <span>Jhon Lee</span>
+                                        </div>
+                                    </td>
+                                    <td>Neurology</td>
+                                    <td>Migraine</td>
+                                    <td>03:30 PM</td>
+                                    <td class="status ongoing">Ongoing</td>
+                                </tr>
+            
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Logout Modal - Common to all pages -->
+    <div id="logout-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Confirm Logout</h2>
+            <p>Are you sure you want to logout?</p>
+            <div class="modal-actions">
+                <button id="confirm-logout" class="btn btn-danger">Logout</button>
+                <button id="cancel-logout" class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
