@@ -67,7 +67,8 @@ function showNotification(msg) {
 
 // LOAD New Appointments
 function loadAppointments() {
-    fetch(`http://127.0.0.1:5000/get_appointments/${DOCTOR_DEPARTMENT}`)
+   // fetch(`http://127.0.0.1:5000/get_appointments/${DOCTOR_DEPARTMENT}`)
+      fetch(`srv-d4osdtf5r7bs73d6qa8g/get_appointments/${DOCTOR_DEPARTMENT}`)
         .then(res => res.json())
         .then(data => {
 
@@ -153,3 +154,4 @@ document.getElementById("logoutBtn").onclick = () => {
 
 </body>
 </html>
+
