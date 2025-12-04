@@ -148,15 +148,24 @@
     }
 
     // CALL FLASK API
-    const res = await fetch("http://127.0.0.1:5000/predict_department", {
-      method:"POST",
-      headers:{ "Content-Type": "application/json" },
-      body:JSON.stringify({
-        name: fullName,
-        age: age,
-        symptoms: symptoms
-      })
-    });
+  //  const res = await fetch("http://127.0.0.1:5000/predict_department", {
+     // method:"POST",
+   //   headers:{ "Content-Type": "application/json" },
+     // body:JSON.stringify({
+     //   name: fullName,
+     //   age: age,
+     //   symptoms: symptoms
+    //  })
+ //   });
+    const res = await fetch("https://medirendor.onrender.com/predict_department", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    name: fullName,
+    age: age,
+    symptoms: symptoms
+  })
+});
 
     const data = await res.json();
     currentDept = data.department;
@@ -251,3 +260,4 @@
 
 </body>
 </html>
+
