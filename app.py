@@ -8,8 +8,14 @@ from datetime import datetime
 from flask import Flask, request, jsonify, send_from_directory
 
 
+
 app = Flask(__name__)
 CORS(app)
+
+@app.route("/")
+def home():
+    return "MediTech Backend is Running!"
+
 
 # ------------------------------------------------------------
 # LOAD MODELS
@@ -149,4 +155,5 @@ def get_appointments(department):
 # ------------------------------------------------------------
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+
 
