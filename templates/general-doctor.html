@@ -66,7 +66,8 @@ function showNotification(msg) {
 
 // LOAD New Patients (from Flask)
 function loadAppointments() {
-    fetch(`http://127.0.0.1:5000/get_appointments/${DOCTOR_DEPARTMENT}`)
+  //  fetch(`http://127.0.0.1:5000/get_appointments/${DOCTOR_DEPARTMENT}`)
+     fetch(`https://medirendor.onrender.com/get_appointments/${DOCTOR_DEPARTMENT}`)
         .then(res => res.json())
         .then(data => {
 
@@ -144,3 +145,4 @@ document.getElementById("logoutBtn").onclick = () => window.location.href = "log
 
 </body>
 </html>
+
