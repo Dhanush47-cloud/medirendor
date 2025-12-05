@@ -210,9 +210,19 @@
                 <a href="login.html" class="btn-hero">Book an Appointment</a> <!-- Updated to go to services -->
                 <button id="emergencyBtn" class="emergency-btn">🚨 Emergency Call</button>
 
+
                 
             </div>
         </section>
+        <button id="custom-call"
+style="position:fixed; bottom:100px; right:30px; padding:12px 20px;
+background:#397DFF; color:white; border:none; border-radius:30px; z-index:9999;">🎧 Talk to Receptionist</button>
+</button>
+
+
+<img id="receptionist-photo"
+     src="receptionist.jpeg"
+     style="display:none; position:fixed; bottom:145px; right:30px; width:180px; border-radius:15px; z-index:9999;">
 
         <section class="container">
             <h2 class="section-title">Our Specialized Services</h2>
@@ -290,7 +300,7 @@
       var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
       v.onload = function() {
         window.voiceflow.chat.load({
-          verify: { projectID: '691f1609eee768720c4bb4c3' },
+          verify: { projectID: '69319602f4f3f8cfea1339f2' },
           url: 'https://general-runtime.voiceflow.com',
           versionID: 'production',
           voice: {
@@ -301,6 +311,32 @@
       v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs"; v.type = "text/javascript"; s.parentNode.insertBefore(v, s);
   })(document, 'script');
 
+  document.getElementById("custom-call").addEventListener("click", () => {
 
+    const photo = document.getElementById("receptionist-photo");
+
+    // If hidden → show, If shown → hide
+    if (photo.style.display === "none") {
+
+        // SHOW the image
+        photo.style.display = "block";
+
+        // Open Voiceflow widget
+        if (window.voiceflow?.chat) {
+            window.voiceflow.chat.open();
+        }
+
+    } else {
+
+        // HIDE the image
+        photo.style.display = "none";
+
+        // Close Voiceflow widget
+        if (window.voiceflow?.chat) {
+            window.voiceflow.chat.close();
+        }
+    }
+
+});
 </script>
 </html>
